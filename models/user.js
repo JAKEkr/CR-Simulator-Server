@@ -11,8 +11,8 @@ const UserSchema = mongoose.Schema({
         student_id: { type: Number, required: true, unique: true },
         password: { type: String, trim: true, required: true },
         name: { type: String, trim: true, required: true },
-        phone: { type: String, trim: true, required: true, unique: true }
-        // birth: { type: Date, trim: true, default: Date.now }
+        phone: { type: String, trim: true, required: true, unique: true },
+        email: { type: String, trim: true, required: true, unique: true }
 });
 
 // Create new user document

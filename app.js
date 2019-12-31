@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
+const userRouter = require('./routes/user');
 const mongoose = require('mongoose');
 const http = require('http');
 const debug = require('debug')('test:server');
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
+app.use('/user', userRouter);
 
 mongoose.Promise = global.Promise;
 mongoose.set('useNewUrlParser', true);
