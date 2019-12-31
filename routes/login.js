@@ -4,42 +4,21 @@ const router = require('express').Router();
 const User = require('../models/user');
 
 router.post('/', function(req, res) {
-    User.findOne({student_id: req.body.student_id})
+    const id = req.body.student_id;
+    User.findOne({student_id: id})
         .then(user => {
-
+            if(user) {
+                    user.comparePassword(req.body.password, function (err, isMatch) {
+                        if (isMatch)
+                            res.send({success: 'true', student_id: id});
+                        else
+                            res.send({success: 'false', student_id: id})
+                    })
+            } else {
+                throw {message: 'Wrong student ID.'};
+            }
         })
-        .catch(error)
-
-
-    {
-        return new Promise(function (resolve, reject) {
-            if(!user || err)
-                reject({student_id: req.body.student_id, success: 'false'});
-
-            user.comparePassword(req.body.password, function (err, isMatch) {
-                if(!isMatch || err)
-                    reject({student_id: req.body.student_id, success: 'false'});
-                else
-                    resolve({student_id: req.body.student_id, success: 'true'});
-            });
-        }).then(msg => res.send(msg))
-            .catch(err => res.send(err));
-    });
+        .catch(error => res.send({success: 'false', student_id: id, error}));
 });
 
-
-// User.findOne({student_id: req.body.student_id}, function(err, user) {
-//     return new Promise(function (resolve, reject) {
-//         if(!user || err)
-//             reject({student_id: req.body.student_id, success: 'false'});
-//
-//         user.comparePassword(req.body.password, function (err, isMatch) {
-//             if(!isMatch || err)
-//                 reject({student_id: req.body.student_id, success: 'false'});
-//             else
-//                 resolve({student_id: req.body.student_id, success: 'true'});
-//         });
-//     }).then(msg => res.send(msg))
-//         .catch(err => res.send(err));
-// });
 module.exports = router;
