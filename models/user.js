@@ -23,29 +23,6 @@ UserSchema.statics.create = function(payload) {
         return user.save();
 };
 
-// Find All
-UserSchema.statics.findAll = function() {
-        // return promise
-        // V4부터 exec() 필요없음
-        return this.find({});
-};
-
-// Find One by student_id
-UserSchema.statics.findOneByStudentID = function(studentID) {
-        return this.findOne({ studentID });
-};
-
-// Update by student_id
-UserSchema.statics.updateByStudentID = function(studentID, payload) {
-        // { new: true }: return the modified document rather than the original. defaults to false
-        return this.findOneAndUpdate({ studentID }, payload, { new: true });
-};
-
-// Delete by student_id
-UserSchema.statics.deleteByStudentID = function(studentID) {
-        return this.remove({ studentID });
-};
-
 UserSchema.pre('save', function(next) {
         const user = this;
 

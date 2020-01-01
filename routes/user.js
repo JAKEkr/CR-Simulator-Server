@@ -4,9 +4,23 @@ const router = require('express').Router();
 const User = require('../models/user');
 
 router.put('/', function(req, res) {
-    User.create(req.body)
-        .then(user => res.send({student_id: req.body.student_id, success: 'true'}))
-        .catch(err => res.send({student_id: req.body.student_id, success: 'false', err}));
+    (async() => {
+        try {
+            await User.findOne({student_id: {$ne: req.body.student_id}, phone: req.body.phone})
+                .then(user => {if(user) throw {type: 'phone', message: 'Duplicate phone number.'}});
+            await User.findOne({student_id: {$ne: req.body.student_id}, email: req.body.email})
+                .then(user => {if(user) throw {type: 'email', message: 'Duplicate email address.'}});
+            await User.deleteOne(req.body.student_id)
+                    .then(result => {
+                        if(result.deletedCount > 0) {
+                            User.create(req.body)
+                                .then(user => res.send({success: 'true', user}));
+                        } else throw {message: 'Cannot find user.'};
+                    });
+        } catch (error) {
+            res.send({success: 'false', error});
+        }
+    })();
 });
 
 router.get('/:student_id', function(req, res) {
@@ -20,8 +34,14 @@ router.get('/:student_id', function(req, res) {
         .catch(error => res.send({success: 'false', error}));
 });
 
-router.get('/find/:name/:phone', function (req, res) {
-
+router.post('/find', function (req, res) {
+    User.findOne({name: req.body.name, phone: req.body.phone})
+        .then(user => {
+            if(user)
+                res.send({success: 'true', user});
+            else throw {message:'Cannot find student.'};
+        })
+        .catch(error => res.send({success: 'false', error}));
 });
 
 module.exports = router;
