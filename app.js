@@ -1,9 +1,12 @@
 require('dotenv').config();
 
 const express = require('express');
+const timetableParser = require('./controllers/timetableParser');
+const timetableRouter = require('./routes/timetable');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 const userRouter = require('./routes/user');
+const regRouter = require('./routes/reg');
 const mongoose = require('mongoose');
 const http = require('http');
 const debug = require('debug')('test:server');
@@ -11,9 +14,11 @@ const debug = require('debug')('test:server');
 const app = express();
 
 app.use(express.json());
+app.use('/timetable', timetableRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 app.use('/user', userRouter);
+app.use('/reg', regRouter);
 
 mongoose.Promise = global.Promise;
 mongoose.set('useNewUrlParser', true);
@@ -21,8 +26,10 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Successfully connected to mongodb'))
-    .catch(e => console.error(e));
+    .then(console.log('Successfully connected to mongodb'))
+    .catch(error => console.error(error));
+
+timetableParser.parse('./res/');
 
 const port = normalizePort(process.env.PORT || '8888');
 app.set('port', port);
@@ -36,23 +43,18 @@ server.on('listening', onListening);
 function normalizePort(val) {
     const port = parseInt(val, 10);
 
-    if (isNaN(port)) {
-        // named pipe
+    if (isNaN(port))
         return val;
-    }
 
-    if (port >= 0) {
-        // port number
+    if (port >= 0)
         return port;
-    }
 
     return false;
 }
 
 function onError(error) {
-    if (error.syscall !== 'listen') {
+    if (error.syscall !== 'listen')
         throw error;
-    }
 
     const bind = typeof port === 'string'
         ? 'Pipe ' + port

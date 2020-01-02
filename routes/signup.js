@@ -2,10 +2,14 @@
 
 const router = require('express').Router();
 const User = require('../models/user');
+const Reg = require('../models/reg');
 
 router.post('/', function(req, res) {
     User.create(req.body)
-        .then(user => res.send({success: 'true', user}))
+        .then(user => {
+            Reg.create({student_id: req.body.student_id});
+            res.send({success: 'true', user})
+        })
         .catch(error => res.send({success: 'false', error}));
 });
 
