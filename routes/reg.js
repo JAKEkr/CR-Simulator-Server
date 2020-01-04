@@ -6,7 +6,7 @@ const Reg = require('../models/reg');
 
 router.get('/:student_id', function(req, res) {
     Reg.findOne({student_id: req.params.student_id})
-        .then(reg => res.send({success: 'true', reg}));
+        .then(reg => {res.send({success: 'true', reg})});
 });
 
 router.put('/', function(req, res) {

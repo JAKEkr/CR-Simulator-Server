@@ -26,8 +26,7 @@ router.put('/', function(req, res) {
 });
 
 router.get('/:student_id', function(req, res) {
-    const id = req.params.student_id;
-    User.findOne({student_id: id})
+    User.findOne({student_id: req.params.student_id})
         .then(user => {
             if(user)
                 res.send({success: 'true', user});
@@ -36,8 +35,9 @@ router.get('/:student_id', function(req, res) {
         .catch(error => res.send({success: 'false', error}));
 });
 
-router.post('/find/phone', function (req, res) {
-    User.findOne({name: req.body.name, phone: req.body.phone})
+router.post('/find/email', function (req, res) {
+    console.log(req.body);
+    User.findOne({name: req.body.name, email: req.body.email})
         .then(user => {
             if(user)
                 res.send({success: 'true', user});
