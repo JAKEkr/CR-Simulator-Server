@@ -1,0 +1,29 @@
+{
+  "name": "cr-simulator-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JAKEkr/CR-Simulator-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JAKEkr/CR-Simulator-Server/issues"
+  },
+  "homepage": "https://github.com/JAKEkr/CR-Simulator-Server#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.3",
+    "pm2": "^4.2.1",
+    "promise": "^8.0.3",
+    "xlsx": "^0.15.4"
+  }
+}
